@@ -1,0 +1,22 @@
+name: Lint and Test
+on:
+    pull_request:
+        branches: ["main", "master"]
+    workflow_dispatch:
+
+jobs:
+    pre-commit-apply:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Set up Python 3.11
+              uses: actions/setup-python@v3
+              with:
+                python-version: "3.11"
+            - name: Find Changed Files
+              id: changed-files
+              uses: tj-actions/changed-files@v44
+            - name: Pre-commit
+              uses: pre-commit/action@v3.0.1
+              with:
+                extra_args: --files ${{ steps.changed-files.outputs.all_changed_and_modified_files}}
