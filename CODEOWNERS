@@ -8,3 +8,6 @@
 
 # This file is also being managed automatically by the gitown tool.
 .pre-commit-config.yaml @MichalMalyska
+poetry.lock @MichalMalyska
+.github/dependabot.yml @MichalMalyska
+CODEOWNERS @MichalMalyska
