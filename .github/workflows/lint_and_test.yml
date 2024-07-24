@@ -25,10 +25,9 @@ jobs:
           extra_args: --files ${{ steps.changed-files.outputs.all_changed_and_modified_files}}
 
       - name: Setup Poetry
-        run: pip install poetry==1.7.0
-
-      - name: Poetry Check and install
-        run: poetry check && poetry lock && poetry install
+        run: |
+          pip install poetry==1.7.0
+          poetry config virtualenvs.create false
 
       - name: Test
-        run: poetry run pytest -v
+        run: pytest -v
