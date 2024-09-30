@@ -10,7 +10,7 @@ python = "^3.11"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.8.0"
-ruff = "^0.6.7"
+ruff = "^0.6.8"
 pytest = "^8.3.3"
 
 [build-system]
