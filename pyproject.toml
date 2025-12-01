@@ -20,10 +20,16 @@ indent-width = 4
 target-version = "py313"
 
 [tool.ruff.lint]
+select = ["ERA", "ANN001","A","COM","C4", "EXE","LOG", "PIE", "PT", "RET", "SIM", "ARG","I", "C901", "NPY", "PD","F" ]
+ignore = ["SIM108"]
 fixable = ["ALL"]
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.mccabe]
+# Flag errors (`C901`) whenever the complexity level exceeds 5.
+max-complexity = 15
 
 [tool.ruff.format]
 
