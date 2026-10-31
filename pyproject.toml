@@ -80,7 +80,7 @@ max-complexity = 10
 
 [tool.ruff.lint.pylint]
 max-args = 20
-max-positional-args = 20
+max-positional-args = 5  # more arguments must be keyword-only
 max-branches = 10
 max-returns = 4
 max-statements = 40
