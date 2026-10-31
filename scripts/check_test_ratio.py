@@ -16,15 +16,15 @@ def count_lines(root: Path) -> int:
     return sum(1 for line in lines if line and not line.startswith("#"))
 
 
-def main() -> int:
+def main() -> None:
     source = count_lines(Path("src"))
     tests = count_lines(Path("tests"))
-    if source < MIN_SOURCE_LINES or tests <= source * MAX_RATIO:
-        return 0
-    print(f"Test code is {tests / source:.1f}x source code ({tests} vs {source} lines). Limit: {MAX_RATIO}x.")
-    print("Delete tests that repeat each other or test implementation details.")
-    return 1
+    if source >= MIN_SOURCE_LINES and tests > source * MAX_RATIO:
+        sys.exit(
+            f"Test code is {tests / source:.1f}x source code ({tests} vs {source} lines). Limit: {MAX_RATIO}x.\n"
+            "Delete tests that repeat each other or test implementation details.",
+        )
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

@@ -1,6 +1,3 @@
-"""Starter package. Rename it when you create a project from this template."""
+from default_python_starter.greet import greet
 
-
-def greet(name: str) -> str:
-    """Return a greeting for `name`."""
-    return f"Hello, {name}!"
+__all__ = ["greet"]

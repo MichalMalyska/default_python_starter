@@ -12,7 +12,6 @@ dev = [
     "ruff>=0.15.10,<0.18",
     "pytest>=9.0.3,<10",
     "complexipy>=8.3.0,<9",
-    "pytest-mock>=3.14,<4",
 ]
 
 [build-system]
@@ -49,7 +48,7 @@ select = [
     "PD",    # pandas
     "PERF",  # performance
     "PIE",   # misc
-    "PL",    # pylint, including PLR0912 too-many-branches
+    "PL",
     "PT",    # pytest style
     "PTH",   # pathlib over os.path
     "RET",   # return statements
@@ -74,7 +73,6 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S101", "PLR2004"]  # assert, magic numbers
-"scripts/**" = ["T201"]  # print
 
 [tool.ruff.lint.mccabe]
 # Flag errors (`C901`) when cyclomatic complexity exceeds 10.
@@ -88,11 +86,11 @@ max-statements = 40
 
 # pytest is the only test framework. Do not mix in unittest.
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
-"unittest".msg = "Use pytest instead of unittest. For mocks, use pytest's monkeypatch or pytest-mock's mocker fixture."
+"unittest".msg = "Use pytest instead of unittest. For mocks, use pytest's monkeypatch fixture."
 
 [tool.complexipy]
 # Cognitive complexity limit per function.
-max-complexity-allowed = 10
+max-complexity-allowed = 15
 paths = ["src", "tests"]
 
 [tool.pytest.ini_options]

@@ -18,14 +18,14 @@ jobs:
         id: metadata
         uses: dependabot/fetch-metadata@v3.1.0
 
-      # Patch and minor updates merge by themselves after CI passes.
-      - name: Approve and auto-merge patch and minor updates
-        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' }}
+      # Dev dependencies merge at any version. Other dependencies merge for
+      # minor and patch only. Each merges when CI passes.
+      - name: Approve and auto-merge
+        if: ${{ steps.metadata.outputs.dependency-group == 'dev-deps' || steps.metadata.outputs.update-type != 'version-update:semver-major' }}
         run: |
-          gh pr review "$PR_URL" --approve --body "Patch or minor update. Auto-merge is on; it merges when CI passes."
+          gh pr review "$PR_URL" --approve --body "Dev dependency, or a minor or patch update. Auto-merge is on; it merges when CI passes."
           gh pr merge --auto --squash "$PR_URL"
 
-      # Major updates wait for a person.
       - name: Flag major updates for review
-        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-major' }}
-        run: gh pr comment "$PR_URL" --body "Major update. Not approved and not set to auto-merge. Review the changelog before merging."
+        if: ${{ steps.metadata.outputs.dependency-group != 'dev-deps' && steps.metadata.outputs.update-type == 'version-update:semver-major' }}
+        run: gh pr comment "$PR_URL" --body "Major update of a runtime dependency. Not approved and not set to auto-merge. Review the changelog before merging."

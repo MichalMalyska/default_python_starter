@@ -15,8 +15,13 @@ updates:
     commit-message:
       prefix: "deps"
     groups:
-      # One PR a week for all minor and patch updates.
-      python-minor-and-patch:
+      # Dev tools in one PR. Auto-merged, majors included.
+      dev-deps:
+        dependency-type: "development"
+      # Runtime packages in one PR. Auto-merged for minor and patch only.
+      # Major updates come as separate PRs and need a human approval.
+      all-other-deps:
+        dependency-type: "production"
         update-types: ["minor", "patch"]
 
   - package-ecosystem: "github-actions"
