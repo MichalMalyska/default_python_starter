@@ -20,7 +20,7 @@ updates:
         dependency-type: "development"
       # Runtime packages in one PR. Auto-merged for minor and patch only.
       # Major updates come as separate PRs and need a human approval.
-      all-other-deps:
+      deps:
         dependency-type: "production"
         update-types: ["minor", "patch"]
 
