@@ -48,7 +48,7 @@ select = [
     "PD",    # pandas
     "PERF",  # performance
     "PIE",   # misc
-    "PL",
+    "PL",    # pylint
     "PT",    # pytest style
     "PTH",   # pathlib over os.path
     "RET",   # return statements
