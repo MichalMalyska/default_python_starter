@@ -1,9 +1,9 @@
 [project]
 name = "default-python-starter"
-version = "1.0"
+version = "1.0.0"
 description = "Starter environment for python work"
 authors = [{ name = "Michal Malyska", email = "malyskamichal@gmail.com" }]
-requires-python = "~=3.11"
+requires-python = ">=3.13"
 readme = "README.md"
 
 [dependency-groups]
@@ -11,7 +11,12 @@ dev = [
     "pre-commit>=4.5.1,<5",
     "ruff>=0.15.10,<0.18",
     "pytest>=9.0.3,<10",
+    "complexipy>=8.3.0,<9",
 ]
+
+[build-system]
+requires = ["uv_build>=0.11,<0.12"]
+build-backend = "uv_build"
 
 [tool.ruff]
 
@@ -20,7 +25,7 @@ indent-width = 4
 target-version = "py313"
 
 [tool.ruff.lint]
-select = ["ERA", "ANN001","A","COM","C4", "EXE","LOG", "PIE", "PT", "RET", "SIM", "ARG","I", "C901", "NPY", "PD","F", "E", "PLR", "FURB", "PLC1802" ]
+select = ["ERA", "ANN001","A","COM","C4", "EXE","LOG", "PIE", "PT", "RET", "SIM", "ARG","I", "C901", "NPY", "PD","F", "E", "PLR", "FURB", "PLC1802", "TID251" ]
 ignore = ["SIM108"]
 fixable = ["ALL"]
 
@@ -28,8 +33,31 @@ fixable = ["ALL"]
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.lint.mccabe]
-# Flag errors (`C901`) whenever the complexity level exceeds 5.
-max-complexity = 15
+# Flag errors (`C901`) when cyclomatic complexity exceeds 10.
+max-complexity = 10
+
+[tool.ruff.lint.pylint]
+max-args = 5
+max-branches = 10
+max-returns = 4
+max-statements = 40
+
+# Tests use plain pytest functions and real objects. Mocks hide bugs and
+# make tests check the implementation instead of the behavior.
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"unittest".msg = "Use plain pytest test functions instead of unittest."
+"unittest.mock".msg = "Mocks are banned. Use real objects, a small fake class, or tmp_path/monkeypatch at IO boundaries."
+"mock".msg = "Mocks are banned. Use real objects, a small fake class, or tmp_path/monkeypatch at IO boundaries."
+"pytest_mock".msg = "Mocks are banned. Use real objects, a small fake class, or tmp_path/monkeypatch at IO boundaries."
+
+[tool.complexipy]
+# Cognitive complexity limit per function.
+max-complexity-allowed = 10
+paths = ["src", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-q", "--strict-markers", "--strict-config"]
 
 [tool.ruff.format]
 

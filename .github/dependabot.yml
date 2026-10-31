@@ -1,27 +1,34 @@
 version: 2
 updates:
-  - package-ecosystem: "pip"
+  - package-ecosystem: "uv"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+    # Wait before taking a new release, so broken releases get yanked first.
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+    open-pull-requests-limit: 2
     assignees:
       - "MichalMalyska"
+    commit-message:
+      prefix: "deps"
     groups:
-      dev-deps:
-        patterns:
-          - "ruff"
-          - "pytest"
-          - "pre-commit"
-      all-other-deps:
-        patterns:
-          - "*"
+      # One PR a week for all minor and patch updates.
+      python-minor-and-patch:
+        update-types: ["minor", "patch"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    cooldown:
+      default-days: 7
     assignees:
       - "MichalMalyska"
+    commit-message:
+      prefix: "ci"
     groups:
       all-github-actions:
         patterns:

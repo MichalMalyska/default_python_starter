@@ -9,15 +9,31 @@ repos:
       - id: check-json
       - id: pretty-format-json
         args: [--no-sort-keys, --autofix]
-      - id: requirements-txt-fixer
       - id: check-merge-conflict
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    # Ruff version.
-    rev: v0.14.7
+  # Local hooks run the tool versions from uv.lock, so pre-commit, CI and
+  # `make check` always agree.
+  - repo: local
     hooks:
-      # Run the linter.
-      - id: ruff
-        args: [--fix]
-      # Run the formatter.
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --fix
+        language: system
+        types_or: [python, pyi]
       - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: system
+        types_or: [python, pyi]
+      - id: complexipy
+        name: complexipy (cognitive complexity)
+        entry: uv run complexipy
+        language: system
+        pass_filenames: false
+        types: [python]
+      - id: test-ratio
+        name: test code size limit
+        entry: uv run python scripts/check_test_ratio.py
+        language: system
+        pass_filenames: false
+        types: [python]
