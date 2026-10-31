@@ -1,9 +1,9 @@
 [project]
 name = "default-python-starter"
-version = "1.0"
+version = "1.0.0"
 description = "Starter environment for python work"
 authors = [{ name = "Michal Malyska", email = "malyskamichal@gmail.com" }]
-requires-python = "~=3.11"
+requires-python = ">=3.13"
 readme = "README.md"
 
 [dependency-groups]
@@ -11,7 +11,12 @@ dev = [
     "pre-commit>=4.5.1,<5",
     "ruff>=0.15.10,<0.18",
     "pytest>=9.0.3,<10",
+    "complexipy>=8.3.0,<9",
 ]
+
+[build-system]
+requires = ["uv_build>=0.11,<0.12"]
+build-backend = "uv_build"
 
 [tool.ruff]
 
@@ -20,16 +25,78 @@ indent-width = 4
 target-version = "py313"
 
 [tool.ruff.lint]
-select = ["ERA", "ANN001","A","COM","C4", "EXE","LOG", "PIE", "PT", "RET", "SIM", "ARG","I", "C901", "NPY", "PD","F", "E", "PLR", "FURB", "PLC1802" ]
-ignore = ["SIM108"]
+select = [
+    "A",     # builtin shadowing
+    "ANN",   # type annotations
+    "ARG",   # unused arguments
+    "B",     # bugbear
+    "BLE",   # blind except
+    "C4",    # comprehensions
+    "C90",   # cyclomatic complexity (C901)
+    "COM",   # trailing commas
+    "DTZ",   # timezone-naive datetimes
+    "E",     # pycodestyle errors
+    "ERA",   # commented-out code
+    "EXE",   # executable files
+    "F",     # pyflakes
+    "FBT",   # boolean positional arguments
+    "FURB",  # refurb
+    "I",     # import sorting
+    "LOG",   # logging
+    "N",     # naming
+    "NPY",   # numpy
+    "PD",    # pandas
+    "PERF",  # performance
+    "PIE",   # misc
+    "PL",    # pylint
+    "PT",    # pytest style
+    "PTH",   # pathlib over os.path
+    "RET",   # return statements
+    "RUF",   # ruff-specific
+    "S",     # bandit security
+    "SIM",   # simplify
+    "SLF",   # private member access
+    "T20",   # print statements
+    "TID251",  # banned imports (unittest)
+    "TRY",   # exception handling
+    "UP",    # pyupgrade
+    "W",     # pycodestyle warnings
+]
+ignore = [
+    "SIM108",  # ternary operator
+    "COM812",  # conflicts with ruff format
+]
 fixable = ["ALL"]
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004"]  # assert, magic numbers
+
 [tool.ruff.lint.mccabe]
-# Flag errors (`C901`) whenever the complexity level exceeds 5.
-max-complexity = 15
+# Flag errors (`C901`) when cyclomatic complexity exceeds 10.
+max-complexity = 10
+
+[tool.ruff.lint.pylint]
+max-args = 20
+max-positional-args = 5  # more arguments must be keyword-only
+max-branches = 10
+max-returns = 4
+max-statements = 40
+
+# pytest is the only test framework. Do not mix in unittest.
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"unittest".msg = "Use pytest instead of unittest. For mocks, use pytest's monkeypatch fixture."
+
+[tool.complexipy]
+# Cognitive complexity limit per function.
+max-complexity-allowed = 15
+paths = ["src", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-q", "--strict-markers", "--strict-config"]
 
 [tool.ruff.format]
 
