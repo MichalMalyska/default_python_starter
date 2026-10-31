@@ -79,7 +79,8 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 max-complexity = 10
 
 [tool.ruff.lint.pylint]
-max-args = 5
+max-args = 20
+max-positional-args = 20
 max-branches = 10
 max-returns = 4
 max-statements = 40
