@@ -12,6 +12,7 @@ dev = [
     "ruff>=0.15.10,<0.18",
     "pytest>=9.0.3,<10",
     "complexipy>=8.3.0,<9",
+    "pytest-mock>=3.14,<4",
 ]
 
 [build-system]
@@ -25,12 +26,55 @@ indent-width = 4
 target-version = "py313"
 
 [tool.ruff.lint]
-select = ["ERA", "ANN001","A","COM","C4", "EXE","LOG", "PIE", "PT", "RET", "SIM", "ARG","I", "C901", "NPY", "PD","F", "E", "PLR", "FURB", "PLC1802", "TID251" ]
-ignore = ["SIM108"]
+select = [
+    "A",     # builtin shadowing
+    "ANN",   # type annotations
+    "ARG",   # unused arguments
+    "B",     # bugbear
+    "BLE",   # blind except
+    "C4",    # comprehensions
+    "C90",   # cyclomatic complexity (C901)
+    "COM",   # trailing commas
+    "DTZ",   # timezone-naive datetimes
+    "E",     # pycodestyle errors
+    "ERA",   # commented-out code
+    "EXE",   # executable files
+    "F",     # pyflakes
+    "FBT",   # boolean positional arguments
+    "FURB",  # refurb
+    "I",     # import sorting
+    "LOG",   # logging
+    "N",     # naming
+    "NPY",   # numpy
+    "PD",    # pandas
+    "PERF",  # performance
+    "PIE",   # misc
+    "PL",    # pylint, including PLR0912 too-many-branches
+    "PT",    # pytest style
+    "PTH",   # pathlib over os.path
+    "RET",   # return statements
+    "RUF",   # ruff-specific
+    "S",     # bandit security
+    "SIM",   # simplify
+    "SLF",   # private member access
+    "T20",   # print statements
+    "TID251",  # banned imports (unittest)
+    "TRY",   # exception handling
+    "UP",    # pyupgrade
+    "W",     # pycodestyle warnings
+]
+ignore = [
+    "SIM108",  # ternary operator
+    "COM812",  # conflicts with ruff format
+]
 fixable = ["ALL"]
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004"]  # assert, magic numbers
+"scripts/**" = ["T201"]  # print
 
 [tool.ruff.lint.mccabe]
 # Flag errors (`C901`) when cyclomatic complexity exceeds 10.
@@ -42,13 +86,9 @@ max-branches = 10
 max-returns = 4
 max-statements = 40
 
-# Tests use plain pytest functions and real objects. Mocks hide bugs and
-# make tests check the implementation instead of the behavior.
+# pytest is the only test framework. Do not mix in unittest.
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
-"unittest".msg = "Use plain pytest test functions instead of unittest."
-"unittest.mock".msg = "Mocks are banned. Use real objects, a small fake class, or tmp_path/monkeypatch at IO boundaries."
-"mock".msg = "Mocks are banned. Use real objects, a small fake class, or tmp_path/monkeypatch at IO boundaries."
-"pytest_mock".msg = "Mocks are banned. Use real objects, a small fake class, or tmp_path/monkeypatch at IO boundaries."
+"unittest".msg = "Use pytest instead of unittest. For mocks, use pytest's monkeypatch or pytest-mock's mocker fixture."
 
 [tool.complexipy]
 # Cognitive complexity limit per function.
